@@ -1,0 +1,211 @@
+
+<html lang="en">
+<head>
+  <title>Spider Graph</title>
+  <meta content="utf-8" http-equiv="encoding">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="d3.v3.min.js" charset="utf-8"></script>
+        <script src="RadarChart.js"></script>
+	<script type="text/javascript" src="aq_clusters.json"></script>
+        <style>
+                body {
+                  overflow: hidden;
+                  margin: 0;
+                  font-size: 14px;
+                  font-family: "Helvetica Neue", Helvetica;
+                }
+
+                #chart {
+                  display: inline-block;
+		  margin-left: auto;
+		  margin-right: auto;
+                }
+		#chart2 {
+		  display:inline-block;
+		  margin-right: auto;
+		  margin-left: auto;
+                }
+		#textt {
+		  display: inline-block;
+		  margin-right: auto;
+		  margin-left: auto;
+		  font-size: 40px;
+		}
+		#ttext {
+		  display: inline-block;
+		  margin-right: auto;
+		  margin-left: auto;
+		  font-size: 40px;
+		}
+        </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+            <a class="navbar-brand" style="background-color: red; color: black; font-weight: bold;" href="index.html">
+                    <img style="max-width:35px; margin-top: -7px;"
+                    src="mantech.jpg">
+            </a>
+      <a class="navbar-brand" style="background-color: red; color: black; font-weight: bold;" href="index.html">
+            Intern Project: Mantech Summer 2019
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="spider.html">Spider Graphs: Al-Qaeda vs ISIS Emotion Clustering</a></li>
+      <li><a href="isnetwork.html">Network Graph: ISIS Concurrence</a></li>
+      <li><a href="aqnetwork.html">Network Graph: Al-Qaeda Concurrence</a></li>
+      <li><a href="../index.html">Back to Caitlyn's Website</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div id="body">
+	  <div style="text-align:center"> 
+		<p style="width: 49%; display: inline-block; text-align:left; padding-left:20px; font-size:30; font-weight:bold"> Al-Qaeda Clusters</p>
+
+		<p style="width: 49%; display: inline-block; text-align:left; padding-left:20px; font-size:30; font-weight:bold"> ISIS Clusters</p>
+	  </div>
+	  <div id="chart"></div>
+	  <div id="chart2"></div>
+    </div>
+
+<script>
+    var w = 500,
+        h = 500;
+
+var colorscale = d3.scale.category10();
+
+//Legend titles al-qaeda
+var LegendOptions = ['Al-Qaeda Cluster 1','Al-Qaeda Cluster 2','Al-Qaeda Cluster 3','Al-Qaeda Cluster 4'];
+
+//legend titles ISIS
+var LegendOptions2 = ['ISIS Cluster 1','ISIS Cluster 2','ISIS Cluster 3', 'ISIS Cluster 4', 'ISIS Cluster 5', 'ISIS Cluster 6']
+
+//Options for the Radar chart, other than default
+var mycfg = {
+  w: w,
+  h: h,
+  maxValue: 0.6,
+  levels: 6,
+  ExtraWidthX: 300
+}
+
+var xhReq = new XMLHttpRequest();
+xhReq.open("GET", "aq_clusters.json", false);
+xhReq.send(null);
+var d = JSON.parse(xhReq.responseText);
+
+var xhReqs = new XMLHttpRequest();
+xhReqs.open("GET", "is_clusters.json", false);
+xhReqs.send(null);
+var d2 = JSON.parse(xhReqs.responseText);
+
+//Call function to draw the Radar chart
+//Will expect that data is in %'s
+RadarChart.draw("#chart", d, mycfg);
+
+RadarChart.draw("#chart2", d2, mycfg); 
+////////////////////////////////////////////
+/////////// Initiate legend ////////////////
+////////////////////////////////////////////
+
+var svg = d3.select('#chart')
+        .selectAll('svg')
+        .append('svg')
+        .attr("width", w+300)
+        .attr("height", h)
+
+//Create the title for the legend
+var text = svg.append("text")
+        .attr("class", "title")
+        .attr('transform', 'translate(90,0)')
+        .attr("x", w - 20)
+        .attr("y", 10)
+        .attr("font-size", "12px")
+        .attr("fill", "#404040")
+        .text("Clusters and Average Emotions:");
+
+//Initiate Legend
+var legend = svg.append("g")
+        .attr("class", "legend")
+     	.attr("height", 100)
+        .attr("width", 200)
+        .attr('transform', 'translate(90,20)')
+        ;
+        //Create colour squares
+        legend.selectAll('rect')
+          .data(LegendOptions)
+          .enter()
+          .append("rect")
+          .attr("x", w - 15)
+          .attr("y", function(d, i){ return i * 20;})
+          .attr("width", 10)
+          .attr("height", 10)
+          .style("fill", function(d, i){ return colorscale(i);})
+          ;
+        //Create text next to squares
+        legend.selectAll('text')
+          .data(LegendOptions)
+          .enter()
+          .append("text")
+          .attr("x", w - 2)
+          .attr("y", function(d, i){ return i * 20 + 9;})
+          .attr("font-size", "11px")
+          .attr("fill", "#737373")
+          .text(function(d) { return d; })
+          ;
+var svg2 = d3.select('#chart2')
+        .selectAll('svg')
+        .append('svg')
+        .attr("width", w+300)
+        .attr("height", h)
+
+//Create the title for the legend
+var text = svg2.append("text")
+        .attr("class", "title")
+        .attr('transform', 'translate(90,0)')
+        .attr("x", w - 20)
+        .attr("y", 10)
+        .attr("font-size", "12px")
+        .attr("fill", "#404040")
+        .text("Clusters and Average Emotions:");
+
+//Initiate Legend
+var legend = svg2.append("g")
+        .attr("class", "legend")
+        .attr("height", 100)
+        .attr("width", 200)
+        .attr('transform', 'translate(90,20)')
+        ;
+        //Create colour squares
+        legend.selectAll('rect')
+          .data(LegendOptions2)
+          .enter()
+          .append("rect")
+          .attr("x", w - 15)
+          .attr("y", function(d, i){ return i * 20;})
+          .attr("width", 10)
+          .attr("height", 10)
+          .style("fill", function(d, i){ return colorscale(i);})
+          ;
+        //Create text next to squares
+        legend.selectAll('text')
+          .data(LegendOptions2)
+          .enter()
+          .append("text")
+          .attr("x", w - 2)
+          .attr("y", function(d, i){ return i * 20 + 9;})
+          .attr("font-size", "11px")
+          .attr("fill", "#737373")
+          .text(function(d) { return d; })
+          ;
+    </script>
+
+</body>
+</html>
+

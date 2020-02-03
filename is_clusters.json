@@ -1,0 +1,206 @@
+[
+    [
+        {
+            "axis": "Anger",
+            "value": 0.057588781879681215
+        },
+        {
+            "axis": "Disgust",
+            "value": 0.026172720700382564
+        },
+        {
+            "axis": "Fear",
+            "value": 0.08613208075579044
+        },
+        {
+            "axis": "Sadness",
+            "value": 0.0754010598758535
+        },
+        {
+            "axis": "Joy",
+            "value": 0.10242817568802744
+        },
+        {
+            "axis": "Anticipation",
+            "value": 0.08323182225852027
+        },
+        {
+            "axis": "Surprise",
+            "value": 0.03929962083278881
+        },
+        {
+            "axis": "Trust",
+            "value": 0.5297457380089555
+        }
+    ],
+    [
+        {
+            "axis": "Anger",
+            "value": 0.04310239107485654
+        },
+        {
+            "axis": "Disgust",
+            "value": 0.01985837199019302
+        },
+        {
+            "axis": "Fear",
+            "value": 0.11845546498933342
+        },
+        {
+            "axis": "Sadness",
+            "value": 0.035265446718938456
+        },
+        {
+            "axis": "Joy",
+            "value": 0.20748521581790297
+        },
+        {
+            "axis": "Anticipation",
+            "value": 0.19175962206755054
+        },
+        {
+            "axis": "Surprise",
+            "value": 0.0613325674027141
+        },
+        {
+            "axis": "Trust",
+            "value": 0.3227409199385114
+        }
+    ],
+    [
+        {
+            "axis": "Anger",
+            "value": 0.13406424775681758
+        },
+        {
+            "axis": "Disgust",
+            "value": 0.022381393190491726
+        },
+        {
+            "axis": "Fear",
+            "value": 0.0938820142261369
+        },
+        {
+            "axis": "Sadness",
+            "value": 0.049320597356673414
+        },
+        {
+            "axis": "Joy",
+            "value": 0.2130452666165135
+        },
+        {
+            "axis": "Anticipation",
+            "value": 0.21686462632227105
+        },
+        {
+            "axis": "Surprise",
+            "value": 0.1623975889584361
+        },
+        {
+            "axis": "Trust",
+            "value": 0.10804426557265981
+        }
+    ],
+    [
+        {
+            "axis": "Anger",
+            "value": 0.27512563929655937
+        },
+        {
+            "axis": "Disgust",
+            "value": 0.10732183792333974
+        },
+        {
+            "axis": "Fear",
+            "value": 0.23902603240853973
+        },
+        {
+            "axis": "Sadness",
+            "value": 0.1529335696757866
+        },
+        {
+            "axis": "Joy",
+            "value": 0.041165301440885364
+        },
+        {
+            "axis": "Anticipation",
+            "value": 0.04381917432698787
+        },
+        {
+            "axis": "Surprise",
+            "value": 0.05374012913271884
+        },
+        {
+            "axis": "Trust",
+            "value": 0.08686831579518224
+        }
+    ],
+    [
+        {
+            "axis": "Anger",
+            "value": 0.04611591214085482
+        },
+        {
+            "axis": "Disgust",
+            "value": 0.04936390035602312
+        },
+        {
+            "axis": "Fear",
+            "value": 0.14823365453006104
+        },
+        {
+            "axis": "Sadness",
+            "value": 0.3163960278696691
+        },
+        {
+            "axis": "Joy",
+            "value": 0.10966410513616308
+        },
+        {
+            "axis": "Anticipation",
+            "value": 0.09198892982764287
+        },
+        {
+            "axis": "Surprise",
+            "value": 0.04404317835167554
+        },
+        {
+            "axis": "Trust",
+            "value": 0.19419429178791053
+        }
+    ],
+    [
+        {
+            "axis": "Anger",
+            "value": 0.14101440632932175
+        },
+        {
+            "axis": "Disgust",
+            "value": 0.05417350994778189
+        },
+        {
+            "axis": "Fear",
+            "value": 0.22048540570171915
+        },
+        {
+            "axis": "Sadness",
+            "value": 0.0948264577070177
+        },
+        {
+            "axis": "Joy",
+            "value": 0.10685679654433138
+        },
+        {
+            "axis": "Anticipation",
+            "value": 0.11601479367322744
+        },
+        {
+            "axis": "Surprise",
+            "value": 0.05766822201605943
+        },
+        {
+            "axis": "Trust",
+            "value": 0.20896040808054242
+        }
+    ]
+]

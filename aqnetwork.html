@@ -1,0 +1,268 @@
+<DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Intern Project</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+  <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+  <title>Radar chart</title>
+  <script src="RadarChartNew.js"></script>
+</head>
+<style>
+
+  .link {
+    stroke: #c1c1c1;
+    stroke-width: 2px;
+    pointer-events: all;
+  }
+
+  .node circle {
+    pointer-events: all;
+    stroke: #777;
+    stroke-width: 1px;
+  }
+
+  div.tooltip {
+    position: absolute;
+    background-color: white;
+    max-width: 650px;
+    height: auto;
+    padding: 5px;
+    border-style: solid;
+    border-radius: 4px;
+    border-width: 1px;
+    box-shadow: 3px 3px 10px rgba(0, 0, 0, .5);
+    pointer-events: none;
+  }
+   
+
+</style>
+<body>
+
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+            <a class="navbar-brand" style="background-color: red; color: black; font-weight: bold;" href="index.html">
+                    <img style="max-width:35px; margin-top: -7px;"
+                    src="mantech.jpg">
+            </a>
+      <a class="navbar-brand" style="background-color: red; color: black; font-weight: bold;" href="index.html">
+            Intern Project: Mantech Summer 2019
+      </a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="spider.html">Spider Graphs: Al-Qaeda vs ISIS Emotion Clustering</a></li>
+      <li><a href="isnetwork.html">Network Graph: ISIS Cooccurrence</a></li>
+      <li><a href="aqnetwork.html">Network Graph: Al-Qaeda Cooccurrence</a></li>
+      <li><a href="../index.html">Back to Caitlyn's Website</a></li>
+    </ul>
+   <title>Network Graph: Al-Qaeda Cooccurrence</title>
+  </div>
+</nav>
+
+</body>
+<svg width="1600" height="950"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/2.24.0/d3-legend.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+<script>
+var w = 500;
+var h = 500; 
+var mycfg = {
+  w: w,
+  h: h,
+  maxValue: 0.6,
+  levels: 6,
+  ExtraWidthX: 300
+};
+
+var color = d3.scaleOrdinal(d3.schemeSet1);
+color(0);
+  color(1);
+  color(2);
+  color(3);
+  color(4);
+  color(5);
+  color(6);
+
+var tooltip = d3.select("body")
+        .append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+
+d3.json("aq_cooccurrence.json", function(error, graph) {
+  if (error) throw error;
+        const svg = d3.select('svg'),
+        width = +svg.attr('width'),
+                        height = +svg.attr('height');
+
+
+
+//  const width = 960;
+//   const height = 700;
+
+  const simulation = d3.forceSimulation()
+    .nodes(graph.nodes)
+    .force('link', d3.forceLink().id(d => d.id))
+    .force('charge', d3.forceManyBody().strength(-10))
+    .force('center', d3.forceCenter(width / 2, height / 2))
+    .force('x',d3.forceX().strength(.01))
+    .force('y',d3.forceY().strength(.01))
+    .on('tick', ticked);
+
+  simulation.force('link')
+    .links(graph.links);
+
+  const R = 6;
+
+  let link = svg.selectAll('line')
+    .data(graph.links)
+    .enter().append('line');
+
+  link
+    .attr('class', 'link')
+        .on('mouseover.tooltip', function(d) {
+        tooltip.transition()
+                .duration(300)
+                .style("opacity", .8);
+        tooltip.html(" Source: "+ d.source.id +
+                     "<p/> Target : " + d.target.id +
+                    "<p/> Strength : "  + d.value)
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 10) + "px");
+        })
+        .on("mouseout.tooltip", function() {
+              tooltip.transition()
+                .duration(100)
+                .style("opacity", 0);
+            })
+                .on('mouseout.fade', fade(1))
+            .on("mousemove", function() {
+              tooltip.style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 10) + "px");
+            });
+        ;
+
+  let node = svg.selectAll('.node')
+    .data(graph.nodes)
+    .enter().append('g')
+    .attr('class', 'node')
+    .call(d3.drag()
+        .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended));;
+
+  node.append('circle')
+    .attr('r', R)
+        .attr("fill", function(d) { return color(d.group-1);})
+    .on('mouseover.tooltip', function(d) {
+        tooltip.transition()
+                .duration(300)
+                .style("opacity", .8);
+        tooltip.html(" Name: " + d.id + "<p/> Group: " + d.group + "<p/> For Spider Graphs: " + "<ul> <li> Blue = Al-Qaeda</li><li> Orange = ISIS </li></ul>" + "<div id='chart'></div>")
+                .style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 10) + "px");
+        RadarChart.draw("#chart", d.spider, mycfg);
+        })
+        .on('mouseover.fade', fade(0.1)) 
+    .on("mouseout.tooltip", function() {
+        tooltip.transition()
+                .duration(100)
+                .style("opacity", 0);
+            })
+        .on('mouseout.fade', fade(1))
+            .on("mousemove", function() {
+              tooltip.style("left", (d3.event.pageX) + "px")
+                .style("top", (d3.event.pageY + 10) + "px");
+            })
+        .on('dblclick',releasenode)
+
+
+  node.append('text')
+    .attr('x', 0)
+    .attr('dy', '.35em')
+    .text(d => d.name);
+
+  function ticked() {
+    link
+      .attr('x1', d => d.source.x)
+      .attr('y1', d => d.source.y)
+      .attr('x2', d => d.target.x)
+      .attr('y2', d => d.target.y);
+
+    node
+      .attr('transform', d => `translate(${d.x},${d.y})`);
+  }
+
+function dragstarted(d) {
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  //d.fx = null;
+  //d.fy = null;
+}
+function releasenode(d) {
+    d.fx = null;
+    d.fy = null;
+}
+
+  const linkedByIndex = {};
+  graph.links.forEach(d => {
+    linkedByIndex[`${d.source.index},${d.target.index}`] = 1;
+  });
+
+  function isConnected(a, b) {
+    return linkedByIndex[`${a.index},${b.index}`] || linkedByIndex[`${b.index},${a.index}`] || a.index === b.index;
+  }
+
+  function fade(opacity) {
+    return d => {
+      node.style('stroke-opacity', function (o) {
+        const thisOpacity = isConnected(d, o) ? 1 : opacity;
+        this.setAttribute('fill-opacity', thisOpacity);
+        return thisOpacity;
+      });
+
+      link.style('stroke-opacity', o => (o.source === d || o.target === d ? 1 : opacity));
+
+    };
+  }
+  var sequentialScale = d3.scaleOrdinal(d3.schemeSet1)
+  .domain([1, 2, 3, 4]);
+
+
+svg.append("g")
+  .attr("class", "legendSequential")
+  .attr("transform", "translate("+(width-140)+","+(height-300)+")");
+
+var legendSequential = d3.legendColor()
+    .shapeWidth(30)
+    .cells(11)
+    .orient("vertical")
+                .title("Group number by color:")
+                .titleWidth(100)
+    .scale(sequentialScale)
+
+svg.select(".legendSequential")
+  .call(legendSequential);
+
+
+})
+
+
+</script>
+
+
